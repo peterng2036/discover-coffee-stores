@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-export default function coffeeStore() {
+export default function CoffeeStore() {
   const rotuer = useRouter();
   return (
     <div>
