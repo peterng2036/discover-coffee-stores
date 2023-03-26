@@ -7,7 +7,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <Fragment>
       <Component {...pageProps} />
       <footer>
-        <p>@2023 Peter Ng</p>
+
       </footer>
     </Fragment>
   );
