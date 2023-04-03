@@ -1,16 +1,19 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
-
-import coffeeStoresData from "../../data/coffee-store.json";
 import { GetStaticProps } from "next";
-import { ParsedUrlQuery } from "querystring";
 import Head from "next/head";
 import Image from "next/image";
+import { faLocation } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CoffeeStoreData, fetchCoffeeStores } from "@/lib/coffee-stores";
+import { PlacesSearchResult } from "../modals/PlacesSearchResponse";
 
-export const getStaticProps: GetStaticProps = ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const coffeeStores = await fetchCoffeeStores();
+
   return {
     props: {
-      coffeeStore: coffeeStoresData.find(
+      coffeeStore: coffeeStores.find(
         (store) => store.id.toString() === params?.id
       ),
     },
@@ -18,7 +21,8 @@ export const getStaticProps: GetStaticProps = ({ params }) => {
 };
 
 export async function getStaticPaths() {
-  const paths = coffeeStoresData.map((coffeeStore) => {
+  const coffeeStores = await fetchCoffeeStores();
+  const paths = coffeeStores.map((coffeeStore) => {
     return {
       params: {
         id: coffeeStore.id.toString(),
@@ -31,12 +35,16 @@ export async function getStaticPaths() {
   };
 }
 
-export default function CoffeeStore({ coffeeStore }: { coffeeStore: any }) {
+export default function CoffeeStore({
+  coffeeStore,
+}: {
+  coffeeStore: CoffeeStoreData;
+}) {
   const rotuer = useRouter();
 
   if (rotuer.isFallback) return <div>Loading...</div>;
 
-  const { address, name, neighbourhood, imgUrl } = coffeeStore;
+  const { address, name, imgUrl } = coffeeStore;
 
   return (
     <div>
@@ -60,8 +68,8 @@ export default function CoffeeStore({ coffeeStore }: { coffeeStore: any }) {
         bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-20
         flex flex-col p-12 mx-4 lg:mt-24 lg:w-3/4"
         >
+          <FontAwesomeIcon icon={faLocation} className="text-white w-4 h-4" />
           <p>{address}</p>
-          <p>{neighbourhood}</p>
         </div>
       </div>
     </div>
