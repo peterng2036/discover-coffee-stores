@@ -22,7 +22,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
 export async function getStaticPaths() {
   const coffeeStores = await fetchCoffeeStores();
-  const paths = coffeeStores.map((coffeeStore) => {
+  const paths = coffeeStores?.map((coffeeStore) => {
     return {
       params: {
         id: coffeeStore.id.toString(),
