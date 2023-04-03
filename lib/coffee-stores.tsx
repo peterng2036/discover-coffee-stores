@@ -30,7 +30,7 @@ export const fetchCoffeeStores = async (
 
   const data = (await res.json()) as PlacesSearchResponse;
 
-  return data.results.map((result, index) => {
+  return data.results?.map((result, index) => {
     return {
       id: result.fsq_id,
       name: result.name,
@@ -54,7 +54,7 @@ const getListOfCoffeeStorePhotos = async () => {
     perPage: 30,
   });
 
-  return photos.response?.results.map((result) => result.urls.small) || [];
+  return photos.response?.results?.map((result) => result.urls.small) || [];
 };
 
 const getUrlForCoffeeStores = (
