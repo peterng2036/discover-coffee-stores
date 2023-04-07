@@ -1,4 +1,4 @@
-import { PlacesSearchResponse } from "@/pages/modals/PlacesSearchResponse";
+import { PlacesSearchResponse } from "@/data/modals/PlacesSearchResponse";
 
 import { createApi } from "unsplash-js";
 

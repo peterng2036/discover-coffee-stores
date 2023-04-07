@@ -1,14 +1,21 @@
-import { useState } from "react";
+import { CoffeeStoreActionType, StoreContext } from "@/pages/_app";
+import { useContext, useState } from "react";
 
 export default function useTrackLocation() {
   const [locationErrorMsg, setLocationErrorMsg] = useState("");
-  const [latlong, setLatLong] = useState("");
   const [isFindingLocation, setIsFindingLocation] = useState(false);
+
+  const { dispatch } = useContext(StoreContext);
 
   const success = (position: any) => {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
-    setLatLong(`${latitude},${longitude}`);
+
+    dispatch({
+      type: CoffeeStoreActionType.SET_LAT_LONG,
+      payload: { latLong: `${latitude},${longitude}` },
+    });
+
     setLocationErrorMsg("");
     setIsFindingLocation(false);
   };
@@ -29,9 +36,11 @@ export default function useTrackLocation() {
   };
 
   return {
-    latlong,
     handleTrackLocation,
     locationErrorMsg,
     isFindingLocation,
   };
+}
+function dispatch(arg0: { type: CoffeeStoreActionType }) {
+  throw new Error("Function not implemented.");
 }

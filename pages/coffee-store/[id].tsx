@@ -6,17 +6,18 @@ import Image from "next/image";
 import { faLocation } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CoffeeStoreData, fetchCoffeeStores } from "@/lib/coffee-stores";
-import { PlacesSearchResult } from "../modals/PlacesSearchResponse";
+import { PlacesSearchResult } from "../../data/modals/PlacesSearchResponse";
+import { useContext, useEffect, useState } from "react";
+import { StoreContext } from "../_app";
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const coffeeStores = await fetchCoffeeStores();
+  const coffeeStore = coffeeStores.find(
+    (store) => store.id.toString() === params?.id
+  ) || { address: "", name: "", imgUrl: "" };
 
   return {
-    props: {
-      coffeeStore: coffeeStores.find(
-        (store) => store.id.toString() === params?.id
-      ),
-    },
+    props: { coffeeStore },
   };
 };
 
@@ -36,13 +37,27 @@ export async function getStaticPaths() {
 }
 
 export default function CoffeeStore({
-  coffeeStore,
+  coffeeStore: initialCoffeeStore,
 }: {
   coffeeStore: CoffeeStoreData;
 }) {
-  const rotuer = useRouter();
+  const router = useRouter();
+  if (router.isFallback) return <div>Loading...</div>;
 
-  if (rotuer.isFallback) return <div>Loading...</div>;
+  const id = router.query.id;
+  const [coffeeStore, setCoffeeStore] = useState(initialCoffeeStore);
+
+  const {
+    state: { coffeeStores },
+  } = useContext(StoreContext);
+
+  useEffect(() => {
+    const findCoffeeStoreById = coffeeStores.find(
+      (store) => store.id.toString() === id
+    ) || { address: "", name: "", imgUrl: "" };
+
+    setCoffeeStore(findCoffeeStoreById);
+  }, [id]);
 
   const { address, name, imgUrl } = coffeeStore;
 
