@@ -8,13 +8,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CoffeeStoreData, fetchCoffeeStores } from "@/lib/coffee-stores";
 import { PlacesSearchResult } from "../../data/modals/PlacesSearchResponse";
 import { useContext, useEffect, useState } from "react";
-import { StoreContext } from "../_app";
+import StoreContext from "../../store/store-context";
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const coffeeStores = await fetchCoffeeStores();
-  const coffeeStore = coffeeStores.find(
-    (store) => store.id.toString() === params?.id
-  ) || { address: "", name: "", imgUrl: "" };
+  const coffeeStore = coffeeStores.find((store) => store.id.toString() === params?.id) || {
+    address: "",
+    name: "",
+    imgUrl: "",
+  };
 
   return {
     props: { coffeeStore },
@@ -36,11 +38,7 @@ export async function getStaticPaths() {
   };
 }
 
-export default function CoffeeStore({
-  coffeeStore: initialCoffeeStore,
-}: {
-  coffeeStore: CoffeeStoreData;
-}) {
+export default function CoffeeStore({ coffeeStore: initialCoffeeStore }: { coffeeStore: CoffeeStoreData }) {
   const router = useRouter();
   if (router.isFallback) return <div>Loading...</div>;
 
@@ -52,9 +50,11 @@ export default function CoffeeStore({
   } = useContext(StoreContext);
 
   useEffect(() => {
-    const findCoffeeStoreById = coffeeStores.find(
-      (store) => store.id.toString() === id
-    ) || { address: "", name: "", imgUrl: "" };
+    const findCoffeeStoreById = coffeeStores.find((store) => store.id.toString() === id) || {
+      address: "",
+      name: "",
+      imgUrl: "",
+    };
 
     setCoffeeStore(findCoffeeStoreById);
   }, [id]);

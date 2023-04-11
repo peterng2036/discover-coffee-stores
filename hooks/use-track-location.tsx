@@ -1,4 +1,4 @@
-import { CoffeeStoreActionType, StoreContext } from "@/pages/_app";
+import StoreContext, { CoffeeStoreActionType } from "../store/store-context";
 import { useContext, useState } from "react";
 
 export default function useTrackLocation() {
@@ -40,7 +40,4 @@ export default function useTrackLocation() {
     locationErrorMsg,
     isFindingLocation,
   };
-}
-function dispatch(arg0: { type: CoffeeStoreActionType }) {
-  throw new Error("Function not implemented.");
 }

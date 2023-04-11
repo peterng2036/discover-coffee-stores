@@ -7,7 +7,7 @@ import { GetStaticProps } from "next";
 import { CoffeeStoreData, fetchCoffeeStores } from "@/lib/coffee-stores";
 import useTrackLocation from "@/hooks/use-track-location";
 import { useContext, useEffect, useState } from "react";
-import { CoffeeStoreActionType, StoreContext } from "./_app";
+import StoreContext, { CoffeeStoreActionType } from "@/store/store-context";
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const coffeeStores = await fetchCoffeeStores();
@@ -22,8 +22,7 @@ export default function Home(props: { coffeeStores: CoffeeStoreData[] }) {
   const { dispatch, state } = useContext(StoreContext);
   const { coffeeStores, latLong } = state;
 
-  const { handleTrackLocation, locationErrorMsg, isFindingLocation } =
-    useTrackLocation();
+  const { handleTrackLocation, locationErrorMsg, isFindingLocation } = useTrackLocation();
 
   const handleOnBannerClick = () => {
     handleTrackLocation();
@@ -63,23 +62,13 @@ export default function Home(props: { coffeeStores: CoffeeStoreData[] }) {
           buttonText={isFindingLocation ? "Locating..." : "View Stores Nearby"}
           handleOnClick={handleOnBannerClick}
         />
-        {locationErrorMsg && (
-          <p className="text-blue-900 mt-2">
-            Something went wrong : {locationErrorMsg}
-          </p>
-        )}
+        {locationErrorMsg && <p className="text-blue-900 mt-2">Something went wrong : {locationErrorMsg}</p>}
 
-        {coffeeStoresError && (
-          <p className="text-blue-900 mt-2">
-            Something went wrong : {coffeeStoresError}
-          </p>
-        )}
+        {coffeeStoresError && <p className="text-blue-900 mt-2">Something went wrong : {coffeeStoresError}</p>}
 
         {coffeeStores.length > 0 && (
           <>
-            <h2 className="mt-24 text-3xl font-bold text-white">
-              Stores near me
-            </h2>
+            <h2 className="mt-24 text-3xl font-bold text-white">Stores near me</h2>
             <div className="mt-4 grid gap-4 justify-items-center-center md:grid-cols-2 lg:grid-cols-3">
               {coffeeStores.map((coffeeStore: CoffeeStoreData) => {
                 return (
@@ -96,9 +85,7 @@ export default function Home(props: { coffeeStores: CoffeeStoreData[] }) {
         )}
         {coffeeStoresData.length > 0 && (
           <>
-            <h2 className="mt-24 text-3xl font-bold text-white">
-              Toronto Stores
-            </h2>
+            <h2 className="mt-24 text-3xl font-bold text-white">Toronto Stores</h2>
             <div className="mt-4 grid gap-4 justify-items-center-center md:grid-cols-2 lg:grid-cols-3">
               {props.coffeeStores.map((coffeeStore: CoffeeStoreData) => {
                 return (
